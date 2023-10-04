@@ -1,6 +1,6 @@
 import { BlockItem } from "./types";
 
-export const blockItems: BlockItem[] = [
+export const blockItems = [
   {
     id: "1",
     type: "ImageBannerBasic",
