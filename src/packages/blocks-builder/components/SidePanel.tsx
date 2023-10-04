@@ -5,8 +5,6 @@ import { blockItems } from "./blocks";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 
-
-
 export const DraggableComponent = ({ id, index, children }: any) => {
   return (
     <Draggable draggableId={id} index={index}>

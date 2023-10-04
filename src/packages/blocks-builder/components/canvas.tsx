@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 import { Drawer, Form, Input, Button } from "antd";
+import { DraggableComponent } from "./SidePanel";
 
 interface CanvasProps {
   items: BlockItem[];
@@ -37,27 +38,15 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
-    setEditableItemId(null); // Reset editableItemId when closing drawer
+    setEditableItemId(null);
   };
 
   const handleEditProps = (newProps: any) => {
-    // Find the index of the item being edited
     const editedItemIndex = items.findIndex((item) => item.id === editableItemId);
-  
-    // Create a copy of the edited item with updated props
-    const updatedItem = {
-      ...items[editedItemIndex],
-      props: newProps,
-    };
-  
-    // Create a copy of the items array with the updated item
+    const updatedItem = { ...items[editedItemIndex], props: newProps };
     const updatedItems = [...items];
     updatedItems[editedItemIndex] = updatedItem;
-  
-    // Call the parent component's onSortItems to update the state
     onSortItems(updatedItems);
-  
-    // Close the drawer
     handleCloseDrawer();
   };
 
@@ -72,74 +61,73 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
   };
 
   return (
-    <Droppable droppableId="canvas" direction="vertical">
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-          style={{
-            padding: 8,
-            backgroundColor: "#e0e0e0",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {provided.placeholder}
-
-          {items?.map((item: BlockItem, index: number) => (
-            <div
-              style={{
-                userSelect: "none",
-                width: "100%",
-              }}
-              onMouseEnter={() => handleHover(item.id)}
-              onMouseLeave={() => handleHover("null")}
-              onClick={() => handleStartEditing(item.id)}
-            >
-              <div>{renderBlockPreview(item)}</div>
-            </div>
-          ))}
-
-          <Drawer
-            title="Edit Props"
-            placement="right"
-            closable={false}
-            onClose={handleCloseDrawer}
-            visible={drawerVisible}
-            width={400}
+      <Droppable droppableId="canvas" direction="vertical">
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            style={{
+              padding: 8,
+              backgroundColor: "#e0e0e0",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            {editableItemId && (
-              <Form
-                onFinish={(newProps) => {
-                  handleEditProps(newProps);
-                  handleFinishEditing();
-                }}
-                initialValues={
-                  items.find((item) => item.id === editableItemId)?.props
-                }
-              >
-                {/* Render form fields based on the props structure */}
-                {Object.entries(
-                  items.find((item) => item.id === editableItemId)?.props || {}
-                ).map(([key, value]) => (
-                  <Form.Item key={key} label={key} name={key}>
-                    <Input />
-                  </Form.Item>
-                ))}
+            {provided.placeholder}
 
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Save
-                  </Button>
-                </Form.Item>
-              </Form>
-            )}
-          </Drawer>
-        </div>
-      )}
-    </Droppable>
+            {items?.map((item: BlockItem, index: number) => (
+              <DraggableComponent key={item.id} id={item.id} index={index}>
+                <div
+                  style={{
+                    userSelect: "none",
+                    width: "100%",
+                  }}
+                  onMouseEnter={() => handleHover(item.id)}
+                  onMouseLeave={() => handleHover("null")}
+                  onClick={() => handleStartEditing(item.id)}
+                >
+                  <div>{renderBlockPreview(item)}</div>
+                </div>
+              </DraggableComponent>
+            ))}
+
+            <Drawer
+              title="Edit Props"
+              placement="right"
+              closable={false}
+              onClose={handleCloseDrawer}
+              visible={drawerVisible}
+              width={400}
+            >
+              {editableItemId && (
+                <Form
+                  onFinish={(newProps) => {
+                    handleEditProps(newProps);
+                    handleFinishEditing();
+                  }}
+                  initialValues={items.find((item) => item.id === editableItemId)?.props}
+                >
+                  {Object.entries(
+                    items.find((item) => item.id === editableItemId)?.props || {}
+                  ).map(([key, value]) => (
+                    <Form.Item key={key} label={key} name={key}>
+                      <Input />
+                    </Form.Item>
+                  ))}
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Save
+                    </Button>
+                  </Form.Item>
+                </Form>
+              )}
+            </Drawer>
+          </div>
+        )}
+      </Droppable>
   );
 };
 

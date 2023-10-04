@@ -23,7 +23,6 @@ const EditorGrid: React.FC<EditorGridProps> = (props) => (
 
 export const Editor: React.FC = (props: any) => {
   const { onDragEnd, onBeforeDragStart, blocks, setCodeItems } = useCode();
-  console.log("🚀 ~ file: editor.tsx:26 ~ useCode:", useCode());
 
   return (
     <CodeProvider>
