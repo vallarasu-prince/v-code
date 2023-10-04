@@ -17,10 +17,11 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
 
   const handleHover = (itemId: string) => {
-    setHoveredItemId(itemId);
+    // setHoveredItemId(itemId);
   };
 
-  const handleOpenDrawer = () => {
+  const handleOpenDrawer = (itemId: string) => {
+    setHoveredItemId(itemId);
     setDrawerVisible(true);
   };
 
@@ -42,7 +43,7 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
 
   const handleStartEditing = (itemId: string) => {
     setEditableItemId(itemId);
-    handleOpenDrawer();
+    handleOpenDrawer(itemId);
   };
 
   const handleFinishEditing = () => {
@@ -61,8 +62,6 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
             backgroundColor: "#e0e0e0",
             width: "100%",
             height: "100%",
-            display: "flex",
-            flexDirection: "column",
           }}
         >
           {items?.map((item: BlockItem, index: number) => (
@@ -71,9 +70,8 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
                 style={{
                   userSelect: "none",
                   width: "100%",
+                  border: hoveredItemId === item.id ? "1px solid red" : undefined,
                 }}
-                onMouseEnter={() => handleHover(item.id)}
-                onMouseLeave={() => handleHover("null")}
                 onClick={() => handleStartEditing(item.id)}
               >
                 <div>{renderBlockPreview(item)}</div>

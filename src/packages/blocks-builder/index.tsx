@@ -7,7 +7,7 @@ const BlocksEditor = () => {
     <div>
       <CodeProvider>
         <header>
-          <Typography.Title>V Code</Typography.Title>
+          <h2>V Code</h2>
         </header>
 
         <Editor />

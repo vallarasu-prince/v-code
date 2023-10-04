@@ -12,8 +12,6 @@ interface EditorGridProps {
 const EditorGrid: React.FC<EditorGridProps> = (props) => (
   <div
     style={{
-      height: "100vh",
-      width: "100%",
       display: "grid",
       gridTemplateColumns: "1fr 400px",
     }}
