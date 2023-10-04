@@ -1,7 +1,7 @@
 // codeContext.js
 import React, { createContext, useContext, useState } from "react";
 import { blockItems } from "../components/blocks";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 const CodeContext = createContext<any>({});
 
@@ -23,30 +23,41 @@ export const CodeProvider = ({ children }: any) => {
       return;
     }
 
-    const { source, destination } = dragResult;
+    const { source, destination, type } = dragResult;
 
+    // If the drag is within the "canvas"
+    if (
+      source.droppableId === "canvas" &&
+      destination.droppableId === "canvas"
+    ) {
+      // Reorder the blocks within the canvas
+      const updatedBlocks = Array.from(codeState.blocks);
+      const [removed] = updatedBlocks.splice(source.index, 1);
+      updatedBlocks.splice(destination.index, 0, removed);
+
+      // Call the parent component's onSortItems to update the state
+      updateCodeState({ blocks: updatedBlocks });
+    }
+
+    // If the drag is from "components" to "canvas"
     if (
       source.droppableId === "components" &&
       destination.droppableId === "canvas"
     ) {
-      const draggedItem = codeState.items[source.index];
-
       // Generate unique ID for the dragged item
-      const updatedItem = {
-        ...draggedItem,
+      const draggedItem = {
+        ...codeState.items[source.index],
         id: uuidv4(),
       };
 
-      setCodeState((prevState: any) => ({
-        ...prevState,
-        blocks: [...prevState.blocks, updatedItem],
-      }));
+      // Add the dragged item to the canvas
+      updateCodeState({
+        blocks: [...codeState.blocks, draggedItem],
+      });
     }
   };
 
   const setCodeItems = (values: any) => {
-    console.log("🚀 ~ file: code.tsx:41 ~ setCodeItems ~ values:", values);
-
     // Generate unique IDs for new items
     const newItemsWithIds = values.map((item: any) => ({
       ...item,
@@ -54,10 +65,7 @@ export const CodeProvider = ({ children }: any) => {
     }));
 
     // Replace the existing items with the new items
-    setCodeState((prevState: any) => ({
-      ...prevState,
-      blocks: newItemsWithIds,
-    }));
+    updateCodeState({ blocks: newItemsWithIds });
   };
 
   const contextValue = {

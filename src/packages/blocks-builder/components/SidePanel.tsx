@@ -5,14 +5,15 @@ import { blockItems } from "./blocks";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 
-export const DraggableComponent = ({ id, index, children }: any) => {
+export const DraggableComponent = ({ id, index, type,  children }: any) => {
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable key={type} draggableId={id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          key={type}
         >
           {children}
         </div>
@@ -36,7 +37,7 @@ const SidePanel: React.FC = () => {
           }}
         >
           {blockItems?.map(({ id, type, props }: BlockItem, index: number) => (
-            <DraggableComponent key={id} id={id} index={index}>
+            <DraggableComponent key={id} id={id} type={type} index={index}>
               <div>
                 {renderBlockPreview({
                   type,

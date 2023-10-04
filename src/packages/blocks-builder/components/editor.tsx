@@ -32,7 +32,11 @@ export const Editor: React.FC = (props: any) => {
           onBeforeDragStart={onBeforeDragStart}
         >
           <EditorGrid>
-            <Canvas items={blocks} onSortItems={setCodeItems} />
+            <Canvas
+              items={blocks}
+              onSortItems={setCodeItems}
+              onDragEnd={onDragEnd}
+            />
             <SidePanel />
           </EditorGrid>
         </DragDropContext>
