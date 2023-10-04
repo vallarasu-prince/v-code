@@ -68,7 +68,11 @@ const items: TabsProps["items"] = [
   {
     key: "2",
     label: "Components",
-    children: "Coming Soon..",
+    children: (
+      <>
+        <h2>Coming Soon..</h2>
+      </>
+    ),
   },
 ];
 
@@ -78,6 +82,8 @@ const SidePanel: React.FC = () => {
       style={{
         background: "white",
         padding: 20,
+        height: "100vh",
+        overflow: "auto",
       }}
     >
       <Tabs defaultActiveKey="1" items={items} />
