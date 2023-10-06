@@ -20,7 +20,14 @@ const EditorGrid: React.FC<EditorGridProps> = (props) => (
 );
 
 export const Editor: React.FC = (props: any) => {
-  const { onDragEnd, onBeforeDragStart, blocks, setCodeItems } = useCode();
+  const {
+    onDragEnd,
+    onBeforeDragStart,
+    blocks,
+    setCodeItems,
+    handleDeleteItem,
+    handleDuplicateItem,
+  } = useCode();
 
   const [isDropDisabled, setIsDropDisabled] = useState(false);
 
@@ -37,6 +44,8 @@ export const Editor: React.FC = (props: any) => {
               onSortItems={setCodeItems}
               onDragEnd={onDragEnd}
               isDropDisabled={isDropDisabled}
+              handleDeleteItem={handleDeleteItem}
+              handleDuplicateItem={handleDuplicateItem}
             />
             <SidePanel setIsDropDisabled={setIsDropDisabled} />
           </EditorGrid>

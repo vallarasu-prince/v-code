@@ -111,11 +111,27 @@ export const CodeProvider = ({ children }: any) => {
     updateCodeState({ blocks: newItemsWithIds });
   };
 
+  const handleDeleteItem = (itemId: string) => {
+    const updatedBlocks = codeState.blocks.filter((block: any) => block.id !== itemId);
+    setCodeItems(updatedBlocks);
+  };
+
+  const handleDuplicateItem = (itemId: string) => {
+    const duplicatedBlock = codeState.blocks.find((block: any) => block.id === itemId);
+    if (duplicatedBlock) {
+      const updatedBlocks = [...codeState.blocks, { ...duplicatedBlock, id: uuidv4() }];
+      setCodeItems(updatedBlocks);
+    }
+  };
+
   const contextValue = {
     ...codeState,
     updateCodeState,
     onDragEnd,
     setCodeItems,
+    handleDeleteItem,
+    handleDuplicateItem
+
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
-import { Drawer, Form, Input, Button } from "antd";
+import { Drawer, Form, Input, Button, Divider } from "antd";
 import { DraggableComponent } from "./sidePanel";
 
 interface CanvasProps {
@@ -11,7 +11,13 @@ interface CanvasProps {
   onDragEnd: (updatedItems: any) => void;
 }
 
-const Canvas = ({ items, onSortItems, isDropDisabled }: any) => {
+const Canvas = ({
+  items,
+  onSortItems,
+  isDropDisabled,
+  handleDeleteItem,
+  handleDuplicateItem,
+}: any) => {
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
   const [editableItemId, setEditableItemId] = useState<string | null>(null);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
@@ -109,6 +115,8 @@ const Canvas = ({ items, onSortItems, isDropDisabled }: any) => {
             handleEditProps={handleEditProps}
             handleFinishEditing={handleFinishEditing}
             items={items}
+            handleDeleteItem={handleDeleteItem}
+            handleDuplicateItem={handleDuplicateItem}
           />
         </div>
       )}
@@ -126,6 +134,8 @@ export const EditProps = (props: any) => {
     handleEditProps,
     handleFinishEditing,
     items,
+    handleDeleteItem = () => {},
+    handleDuplicateItem = () => {},
   } = props;
 
   return (
@@ -137,6 +147,18 @@ export const EditProps = (props: any) => {
         onClose={handleCloseDrawer}
         visible={drawerVisible}
         width={400}
+        extra={
+          <>
+            <div>
+              <Button onClick={() => handleDeleteItem(editableItemId)} danger>
+                Delete
+              </Button>{" "}
+              <Button onClick={() => handleDuplicateItem(editableItemId)}>
+                Duplicate
+              </Button>
+            </div>
+          </>
+        }
       >
         {editableItemId && (
           <Form

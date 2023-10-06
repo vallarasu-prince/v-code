@@ -83,8 +83,7 @@ const items: TabsProps["items"] = [
               ref={provided.innerRef}
               {...provided.droppableProps}
               style={{
-                padding: 8,
-                backgroundColor: "#f0f0f0",
+                // padding: 8,
                 width: "100%",
                 height: "100%",
               }}

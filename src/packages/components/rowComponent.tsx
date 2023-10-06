@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { DraggableComponent } from "../blocks-builder/components/sidePanel";
 import { renderBlockPreview } from "../blocks-builder/components/block-preview";
 import { Col, Row } from "antd";
 import { EditProps } from "../blocks-builder/components/canvas";
