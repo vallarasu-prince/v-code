@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { blockItems } from "../components/blocks";
 import { v4 as uuidv4 } from "uuid";
-import { components } from "../components/sidePanel";
+import { components } from "../components/components";
 
 const CodeContext = createContext<any>({});
 
@@ -20,13 +20,11 @@ export const CodeProvider = ({ children }: any) => {
   };
 
   const onDragEnd = (dragResult: any) => {
-    console.log("🚀 ~ file: code.tsx:22 ~ onDragEnd ~ dragResult:", dragResult);
     if (!dragResult.destination) {
       return;
     }
 
     const { source, destination, type, draggableId } = dragResult;
-    console.log("🚀 ~ file: code.tsx:27 ~ onDragEnd ~ source:", source);
 
     // If the drag is within the "canvas"
     if (

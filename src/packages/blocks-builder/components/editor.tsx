@@ -21,10 +21,8 @@ const EditorGrid: React.FC<EditorGridProps> = (props) => (
 
 export const Editor: React.FC = (props: any) => {
   const { onDragEnd, onBeforeDragStart, blocks, setCodeItems } = useCode();
-  console.log("🚀 ~ file: editor.tsx:24 ~ useCode:", useCode())
 
   const [isDropDisabled, setIsDropDisabled] = useState(false);
-  console.log("🚀 ~ file: editor.tsx:26 ~ isDropDisabled:", isDropDisabled)
 
   return (
     <CodeProvider>

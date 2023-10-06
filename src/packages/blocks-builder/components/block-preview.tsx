@@ -1,9 +1,8 @@
 import RowComponent from "../../components/rowComponent";
 import { BlockItem } from "./types";
 
-export const renderBlockPreview = (block: any) => {
+export const renderBlockPreview = (block: any, onElementSelected: any ) => {
   switch (block.type) {
-    
     case "ImageBannerBasic":
       return (
         <div style={{ width: "100%" }}>
@@ -16,7 +15,7 @@ export const renderBlockPreview = (block: any) => {
       );
 
     case "RowComponent":
-      return <RowComponent {...block} />;
+      return <RowComponent {...block} onElementSelected={onElementSelected} />;
 
     case "Img":
       return (

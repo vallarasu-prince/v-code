@@ -5,6 +5,7 @@ import { blockItems } from "./blocks";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 import { Tabs, TabsProps } from "antd";
+import { components } from "./components";
 
 export const DraggableComponent: any = ({ id, index, children }: any) => {
   return (
@@ -22,17 +23,7 @@ export const DraggableComponent: any = ({ id, index, children }: any) => {
   );
 };
 
-export const components = [
-  {
-    id: "2090",
-    type: "Img",
-    props: {
-      backgroundImage:
-        "https://img.freepik.com/free-photo/vintage-grunge-blue-concrete-texture-wall-background-with-vignette_1258-28373.jpg?w=996&t=st=1696414061~exp=1696414661~hmac=a1e77ba70fdd240cc1f02ecb0cef6a25c5fd8ab408779631612c62b05716169d",
-      justifyContent: "space-between",
-    },
-  },
-];
+const onElementSelected: any = () => {};
 
 const items: TabsProps["items"] = [
   {
@@ -61,12 +52,16 @@ const items: TabsProps["items"] = [
                     index={index}
                   >
                     <div>
-                      {renderBlockPreview({
-                        type,
-                        props,
-                        id,
-                        children,
-                      })}
+                      {renderBlockPreview(
+                        {
+                          type,
+                          props,
+                          id,
+                          children,
+                          ptype: "sidepanel",
+                        },
+                        onElementSelected
+                      )}
                     </div>
                   </DraggableComponent>
                 )
@@ -103,17 +98,20 @@ const items: TabsProps["items"] = [
                     index={index}
                   >
                     <div>
-                      {renderBlockPreview({
-                        type,
-                        props,
-                        id,
-                        children,
-                      })}
+                      {renderBlockPreview(
+                        {
+                          type,
+                          props,
+                          id,
+                          children,
+                          ptype: "sidepanel",
+                        },
+                        onElementSelected
+                      )}
                     </div>
                   </DraggableComponent>
                 )
               )}
-              hi
             </div>
           )}
         </Droppable>

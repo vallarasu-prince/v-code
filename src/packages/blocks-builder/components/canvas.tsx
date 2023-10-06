@@ -18,14 +18,21 @@ const Canvas = ({ items, onSortItems, isDropDisabled }: any) => {
 
   const [elementStyle, setElementStyle] = useState({});
 
+  const [isElementSelected, setIsElementSelected] = useState<boolean>(false);
+
   const onHover = (itemId: string) => {
     setHoveredItemId(itemId);
-    // setElementStyle({ padding: 2 });
+    // setElementStyle({ padding: 20 });
+  };
+
+  const onElementSelected = (value: any) => {
+    setIsElementSelected(value);
   };
 
   const onHoverLeave = (itemId: string) => {
     setHoveredItemId(null);
     setElementStyle({});
+    // setIsElementSelected(false);
   };
   const handleOpenDrawer = (itemId: string) => {
     setHoveredItemId(itemId);
@@ -49,8 +56,10 @@ const Canvas = ({ items, onSortItems, isDropDisabled }: any) => {
   };
 
   const handleStartEditing = (itemId: string) => {
-    setEditableItemId(itemId);
-    handleOpenDrawer(itemId);
+    if (!isElementSelected) {
+      setEditableItemId(itemId);
+      handleOpenDrawer(itemId);
+    }
   };
 
   const handleFinishEditing = () => {
@@ -88,7 +97,7 @@ const Canvas = ({ items, onSortItems, isDropDisabled }: any) => {
                 onMouseLeave={() => onHoverLeave(item.id)}
                 onClick={() => handleStartEditing(item.id)}
               >
-                {renderBlockPreview(item)}
+                {renderBlockPreview(item, onElementSelected)}
               </div>
             </DraggableComponent>
           ))}
