@@ -3,7 +3,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 import { Drawer, Form, Input, Button, Divider } from "antd";
-import { DraggableComponent } from "./sidePanel";
+import { DraggableComponent } from "./sidePanel"; 
 
 interface CanvasProps {
   items: BlockItem[];

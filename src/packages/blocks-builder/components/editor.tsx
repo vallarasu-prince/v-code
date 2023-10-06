@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Canvas from "./canvas";
-import SidePanel from "./sidePanel";
+import SidePanel from "./sidePanel"; 
 import { CodeProvider, useCode } from "../providors/code";
 
 interface EditorGridProps {
