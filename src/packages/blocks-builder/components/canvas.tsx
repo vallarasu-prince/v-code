@@ -11,11 +11,22 @@ interface CanvasProps {
   onDragEnd: (updatedItems: any) => void;
 }
 
-const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
+const Canvas = ({ items, onSortItems, isDropDisabled }: any) => {
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
   const [editableItemId, setEditableItemId] = useState<string | null>(null);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
 
+  const [elementStyle, setElementStyle] = useState({});
+
+  const onHover = (itemId: string) => {
+    setHoveredItemId(itemId);
+    // setElementStyle({ padding: 2 });
+  };
+
+  const onHoverLeave = (itemId: string) => {
+    setHoveredItemId(null);
+    setElementStyle({});
+  };
   const handleOpenDrawer = (itemId: string) => {
     setHoveredItemId(itemId);
     setDrawerVisible(true);
@@ -28,7 +39,7 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
 
   const handleEditProps = (newProps: any) => {
     const editedItemIndex = items.findIndex(
-      (item) => item.id === editableItemId
+      (item: any) => item.id === editableItemId
     );
     const updatedItem = { ...items[editedItemIndex], props: newProps };
     const updatedItems = [...items];
@@ -48,7 +59,11 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
   };
 
   return (
-    <Droppable droppableId="canvas" direction="vertical">
+    <Droppable
+      isDropDisabled={isDropDisabled}
+      droppableId="canvas"
+      direction="vertical"
+    >
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -66,8 +81,11 @@ const Canvas: React.FC<CanvasProps> = ({ items, onSortItems }) => {
               <div
                 style={{
                   border:
-                    hoveredItemId === item.id ? "1px solid red" : undefined,
+                    hoveredItemId === item.id ? "2px solid blue" : undefined,
+                  ...(hoveredItemId === item.id && elementStyle),
                 }}
+                onMouseOver={() => onHover(item.id)}
+                onMouseLeave={() => onHoverLeave(item.id)}
                 onClick={() => handleStartEditing(item.id)}
               >
                 {renderBlockPreview(item)}

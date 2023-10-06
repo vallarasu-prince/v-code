@@ -6,15 +6,14 @@ import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 import { Tabs, TabsProps } from "antd";
 
-export const DraggableComponent = ({ id, index, type, children }: any) => {
+export const DraggableComponent: any = ({ id, index, children }: any) => {
   return (
-    <Draggable key={type} draggableId={id} index={index}>
+    <Draggable key={id} draggableId={id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          key={type}
         >
           {children}
         </div>
@@ -22,6 +21,18 @@ export const DraggableComponent = ({ id, index, type, children }: any) => {
     </Draggable>
   );
 };
+
+export const components = [
+  {
+    id: "2090",
+    type: "Img",
+    props: {
+      backgroundImage:
+        "https://img.freepik.com/free-photo/vintage-grunge-blue-concrete-texture-wall-background-with-vignette_1258-28373.jpg?w=996&t=st=1696414061~exp=1696414661~hmac=a1e77ba70fdd240cc1f02ecb0cef6a25c5fd8ab408779631612c62b05716169d",
+      justifyContent: "space-between",
+    },
+  },
+];
 
 const items: TabsProps["items"] = [
   {
@@ -42,7 +53,7 @@ const items: TabsProps["items"] = [
               }}
             >
               {blockItems?.map(
-                ({ id, type, props }: BlockItem, index: number) => (
+                ({ id, type, props, children }: any, index: number) => (
                   <DraggableComponent
                     key={id}
                     id={id}
@@ -54,6 +65,7 @@ const items: TabsProps["items"] = [
                         type,
                         props,
                         id,
+                        children,
                       })}
                     </div>
                   </DraggableComponent>
@@ -70,13 +82,47 @@ const items: TabsProps["items"] = [
     label: "Components",
     children: (
       <>
-        <h2>Coming Soon..</h2>
+        <Droppable droppableId="components" direction="vertical">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              style={{
+                padding: 8,
+                backgroundColor: "#f0f0f0",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              {components?.map(
+                ({ id, type, props, children }: any, index: number) => (
+                  <DraggableComponent
+                    key={id}
+                    id={id}
+                    type={type}
+                    index={index}
+                  >
+                    <div>
+                      {renderBlockPreview({
+                        type,
+                        props,
+                        id,
+                        children,
+                      })}
+                    </div>
+                  </DraggableComponent>
+                )
+              )}
+              hi
+            </div>
+          )}
+        </Droppable>
       </>
     ),
   },
 ];
 
-const SidePanel: React.FC = () => {
+const SidePanel = (props: any) => {
   return (
     <div
       style={{
@@ -86,7 +132,15 @@ const SidePanel: React.FC = () => {
         overflow: "auto",
       }}
     >
-      <Tabs defaultActiveKey="1" items={items} />
+      <Tabs
+        defaultActiveKey="1"
+        items={items}
+        onChange={(e) => {
+          if (e === "2") {
+            props?.setIsDropDisabled(true);
+          } else props?.setIsDropDisabled(false);
+        }}
+      />
     </div>
   );
 };

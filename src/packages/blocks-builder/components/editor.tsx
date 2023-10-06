@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Canvas from "./canvas";
 import SidePanel from "./sidePanel";
@@ -21,6 +21,10 @@ const EditorGrid: React.FC<EditorGridProps> = (props) => (
 
 export const Editor: React.FC = (props: any) => {
   const { onDragEnd, onBeforeDragStart, blocks, setCodeItems } = useCode();
+  console.log("🚀 ~ file: editor.tsx:24 ~ useCode:", useCode())
+
+  const [isDropDisabled, setIsDropDisabled] = useState(false);
+  console.log("🚀 ~ file: editor.tsx:26 ~ isDropDisabled:", isDropDisabled)
 
   return (
     <CodeProvider>
@@ -34,8 +38,9 @@ export const Editor: React.FC = (props: any) => {
               items={blocks}
               onSortItems={setCodeItems}
               onDragEnd={onDragEnd}
+              isDropDisabled={isDropDisabled}
             />
-            <SidePanel />
+            <SidePanel setIsDropDisabled={setIsDropDisabled} />
           </EditorGrid>
         </DragDropContext>
       </Layout>
