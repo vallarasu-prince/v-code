@@ -8,4 +8,13 @@ export const components = [
       justifyContent: "space-between",
     },
   },
+  {
+    id: "4",
+    type: "text",
+    props: {
+      text: "hi",
+      fontSize: "20px"
+    },
+
+  }
 ];

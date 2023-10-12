@@ -3,13 +3,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BlockItem } from "./types";
 import { renderBlockPreview } from "./block-preview";
 import { Drawer, Form, Input, Button, Divider } from "antd";
-import { DraggableComponent } from "./sidePanel"; 
-
-interface CanvasProps {
-  items: BlockItem[];
-  onSortItems: (updatedItems: BlockItem[]) => void;
-  onDragEnd: (updatedItems: any) => void;
-}
+import { DraggableComponent } from "./sidePanel";
 
 const Canvas = ({
   items,
@@ -20,6 +14,7 @@ const Canvas = ({
 }: any) => {
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
   const [editableItemId, setEditableItemId] = useState<string | null>(null);
+  const [editableItemIndex, setEditableItemIndex] = useState<number | null>(null);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
 
   const [elementStyle, setElementStyle] = useState({});
@@ -38,7 +33,7 @@ const Canvas = ({
   const onHoverLeave = (itemId: string) => {
     setHoveredItemId(null);
     setElementStyle({});
-    // setIsElementSelected(false);
+    setIsElementSelected(false);
   };
   const handleOpenDrawer = (itemId: string) => {
     setHoveredItemId(itemId);
@@ -48,6 +43,7 @@ const Canvas = ({
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
     setEditableItemId(null);
+    setEditableItemIndex(null);
   };
 
   const handleEditProps = (newProps: any) => {
@@ -61,10 +57,11 @@ const Canvas = ({
     handleCloseDrawer();
   };
 
-  const handleStartEditing = (itemId: string) => {
+  const handleStartEditing = (itemId: string, index: number) => {
     if (!isElementSelected) {
       setEditableItemId(itemId);
       handleOpenDrawer(itemId);
+      setEditableItemIndex(index);
     }
   };
 
@@ -101,9 +98,18 @@ const Canvas = ({
                 }}
                 onMouseOver={() => onHover(item.id)}
                 onMouseLeave={() => onHoverLeave(item.id)}
-                onClick={() => handleStartEditing(item.id)}
+                onClick={() => handleStartEditing(item.id, index)}
               >
-                {renderBlockPreview(item, onElementSelected)}
+                {renderBlockPreview(
+                  items,
+                  index,
+                  item,
+                  onElementSelected,
+                  handleDeleteItem,
+                  handleDuplicateItem,
+                  onSortItems,
+                  editableItemIndex
+                )}
               </div>
             </DraggableComponent>
           ))}
@@ -117,6 +123,8 @@ const Canvas = ({
             items={items}
             handleDeleteItem={handleDeleteItem}
             handleDuplicateItem={handleDuplicateItem}
+            editableItemIndex={editableItemIndex}
+            type="parent"
           />
         </div>
       )}
@@ -136,6 +144,8 @@ export const EditProps = (props: any) => {
     items,
     handleDeleteItem = () => {},
     handleDuplicateItem = () => {},
+    editableItemIndex,
+    type,
   } = props;
 
   return (
@@ -150,10 +160,19 @@ export const EditProps = (props: any) => {
         extra={
           <>
             <div>
-              <Button onClick={() => handleDeleteItem(editableItemId)} danger>
+              <Button
+                onClick={() =>
+                  handleDeleteItem(editableItemId, type, editableItemIndex)
+                }
+                danger
+              >
                 Delete
               </Button>{" "}
-              <Button onClick={() => handleDuplicateItem(editableItemId)}>
+              <Button
+                onClick={() =>
+                  handleDuplicateItem(editableItemId, type, editableItemIndex)
+                }
+              >
                 Duplicate
               </Button>
             </div>

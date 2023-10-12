@@ -46,9 +46,23 @@ export const CodeProvider = ({ children }: any) => {
       destination.droppableId === "canvas"
     ) {
       // Generate unique ID for the dragged item [draggableId]
-      const foundTemplate = codeState.items.find(
+      let foundTemplate = codeState.items.find(
         (item: any) => item.id === draggableId
       );
+
+      if (foundTemplate?.children) {
+        const foundTemplateChildren = foundTemplate?.children.map(
+          (child: any) => {
+            return { ...child, id: uuidv4() };
+          }
+        );
+
+        foundTemplate = {
+          ...foundTemplate,
+          children: foundTemplateChildren,
+        };
+      }
+
       const draggedItem = {
         ...foundTemplate,
         id: uuidv4(),
@@ -67,6 +81,7 @@ export const CodeProvider = ({ children }: any) => {
       const foundComponent = codeState.items.find(
         (item: any) => item.id === draggableId
       );
+      
       const draggedItem = {
         ...foundComponent,
         id: uuidv4(),
@@ -86,7 +101,12 @@ export const CodeProvider = ({ children }: any) => {
       // Clone the RowComponent and update its children array
       const updatedRowComponent = {
         ...codeState.blocks[rowIndex],
-        children: [...(codeState.blocks[rowIndex].children || []), draggedItem],
+        children: [
+          ...(codeState.blocks[rowIndex].children.map((child: any) => {
+            return { ...child, id: uuidv4() };
+          }) || []),
+          draggedItem,
+        ],
       };
 
       // Update the state with the modified RowComponent
@@ -101,6 +121,7 @@ export const CodeProvider = ({ children }: any) => {
   };
 
   const setCodeItems = (values: any) => {
+    console.log("🚀 ~ file: code.tsx:123 ~ setCodeItems ~ values:", values)
     // Generate unique IDs for new items
     const newItemsWithIds = values.map((item: any) => ({
       ...item,
@@ -111,17 +132,56 @@ export const CodeProvider = ({ children }: any) => {
     updateCodeState({ blocks: newItemsWithIds });
   };
 
-  const handleDeleteItem = (itemId: string) => {
-    const updatedBlocks = codeState.blocks.filter((block: any) => block.id !== itemId);
+  const handleDeleteItem = (itemId: string, type: string) => {
+    let updatedBlocks = [];
+
+    if (type === "parent") {
+      updatedBlocks = codeState.blocks.filter(
+        (block: any) => block.id !== itemId
+      );
+    } else {
+      updatedBlocks = codeState.blocks.map((block: any) => {
+        if (block.children && block.children.length > 0) {
+          const updatedChildren = block.children.filter(
+            (child: any) => child.id !== itemId
+          );
+          return {
+            ...block,
+            children: updatedChildren,
+          };
+        }
+        return block;
+      });
+    }
+
     setCodeItems(updatedBlocks);
   };
 
-  const handleDuplicateItem = (itemId: string) => {
-    const duplicatedBlock = codeState.blocks.find((block: any) => block.id === itemId);
-    if (duplicatedBlock) {
-      const updatedBlocks = [...codeState.blocks, { ...duplicatedBlock, id: uuidv4() }];
-      setCodeItems(updatedBlocks);
+  const handleDuplicateItem = (itemId: string, type: string) => {
+    const duplicatedBlock = codeState.blocks.find(
+      (block: any) => block.id === itemId
+    );
+
+    let updatedBlocks = [...codeState.blocks];
+
+    if (type === "parent") {
+      updatedBlocks.push({ ...duplicatedBlock, id: uuidv4() });
+    } else {
+      updatedBlocks = updatedBlocks.map((block: any) => {
+        if (block.children && block.children.length > 0) {
+          const indexOfChild = block.children.find(
+            (child: any) => child.id === itemId
+          );
+          const updatedChildren = [
+            ...block.children.slice(indexOfChild + 1),
+            { ...indexOfChild, id: uuidv4() },
+          ];
+          return { ...block, children: updatedChildren };
+        }
+        return block;
+      });
     }
+    setCodeItems(updatedBlocks);
   };
 
   const contextValue = {
@@ -130,8 +190,7 @@ export const CodeProvider = ({ children }: any) => {
     onDragEnd,
     setCodeItems,
     handleDeleteItem,
-    handleDuplicateItem
-
+    handleDuplicateItem,
   };
 
   return (

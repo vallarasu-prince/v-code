@@ -24,6 +24,7 @@ export const DraggableComponent: any = ({ id, index, children }: any) => {
 };
 
 const onElementSelected: any = () => {};
+const onSortItems: any = () => {};
 
 const items: TabsProps["items"] = [
   {
@@ -53,6 +54,8 @@ const items: TabsProps["items"] = [
                   >
                     <div>
                       {renderBlockPreview(
+                        "",
+                        "",
                         {
                           type,
                           props,
@@ -60,7 +63,11 @@ const items: TabsProps["items"] = [
                           children,
                           ptype: "sidepanel",
                         },
-                        onElementSelected
+                        onElementSelected,
+                        onSortItems,
+                        {},
+                        {},
+                        {}
                       )}
                     </div>
                   </DraggableComponent>
@@ -98,6 +105,8 @@ const items: TabsProps["items"] = [
                   >
                     <div>
                       {renderBlockPreview(
+                        "",
+                        "",
                         {
                           type,
                           props,
@@ -105,7 +114,11 @@ const items: TabsProps["items"] = [
                           children,
                           ptype: "sidepanel",
                         },
-                        onElementSelected
+                        onElementSelected,
+                        onSortItems,
+                        {},
+                        {},
+                        {}
                       )}
                     </div>
                   </DraggableComponent>
