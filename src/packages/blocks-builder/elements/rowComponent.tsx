@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { renderBlockPreview } from "../components/block-preview";
 import { Col, Row } from "antd";
-import { EditProps } from "../components/canvas";
 import { useCode } from "../providors/code";
 import { DraggableComponent } from "../components/sidePanel";
+import { EditHoverWrapper, EditProps } from "../common";
 
 const RowComponent = (props: any) => {
   const {
@@ -38,16 +38,7 @@ const RowComponent = (props: any) => {
               index={index}
             >
               {/* <DraggableComponent key={item.id} id={item.id} index={index}> */}
-                {renderBlockPreview(
-                  items,
-                  index,
-                  item,
-                  onElementSelected,
-                  handleDeleteItem,
-                  handleDuplicateItem,
-                  onSortItems,
-                  editableItemIndex
-                )}
+              {/* {renderBlockPreview(item)} */}
               {/* </DraggableComponent> */}
             </EditHoverWrapper>
           </Col>
@@ -77,107 +68,5 @@ const ComponentDroppable = (props: any) => {
         </div>
       )}
     </Droppable>
-  );
-};
-
-const EditHoverWrapper = (props: any) => {
-  const {
-    children,
-    onElementSelected,
-    ptype,
-    item,
-    handleDuplicateItem,
-    handleDeleteItem,
-    onSortItems,
-    items,
-    pitems,
-    index,
-  } = props;
-
-  const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
-  const [editableItemId, setEditableItemId] = useState<string | null>(null);
-  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
-  const [editableItemIndex, setEditableItemIndex] = useState<number | null>(
-    null
-  );
-
-  const [elementStyle, setElementStyle] = useState({});
-
-  const onHover = (itemId: string) => {
-    setHoveredItemId(itemId);
-    if (ptype !== "sidepanel") {
-      setElementStyle({ padding: 2 });
-    }
-    onElementSelected(() => {
-      return true;
-    });
-  };
-
-  const onHoverLeave = (itemId: string) => {
-    setHoveredItemId(null);
-    setElementStyle({});
-    onElementSelected(() => {
-      return false;
-    });
-  };
-
-  const handleOpenDrawer = (itemId: string) => {
-    setHoveredItemId(itemId);
-    setDrawerVisible(true);
-  };
-
-  const handleCloseDrawer = () => {
-    setDrawerVisible(false);
-    setEditableItemId(null);
-  };
-
-  const handleEditProps = (newProps: any) => {
-    const editedItemIndex = items.findIndex(
-      (item: any) => item.id === editableItemId
-    );
-    const updatedItem = { ...items[editedItemIndex], props: newProps };
-    pitems[index]["children"][editedItemIndex] = updatedItem;
-    onSortItems(pitems);
-    handleCloseDrawer();
-  };
-
-  const handleStartEditing = (itemId: string, idx: any) => {
-    if (ptype !== "sidepanel") {
-      setEditableItemId(itemId);
-      setEditableItemIndex(idx);
-      handleOpenDrawer(itemId);
-    }
-  };
-
-  const handleFinishEditing = () => {
-    setEditableItemId(null);
-    handleCloseDrawer();
-  };
-
-  return (
-    <>
-      <div
-        style={{
-          border: hoveredItemId === item.id ? "2px solid blue" : undefined,
-          ...(hoveredItemId === item.id && elementStyle),
-        }}
-        onMouseOver={() => onHover(item.id)}
-        onMouseLeave={() => onHoverLeave(item.id)}
-        onClick={() => handleStartEditing(item.id, item)}
-      >
-        {children}
-      </div>
-      <EditProps
-        handleCloseDrawer={handleCloseDrawer}
-        drawerVisible={drawerVisible}
-        editableItemId={editableItemId}
-        handleEditProps={handleEditProps}
-        handleFinishEditing={handleFinishEditing}
-        items={items}
-        handleDeleteItem={handleDeleteItem}
-        handleDuplicateItem={handleDuplicateItem}
-        type="child"
-      />
-    </>
   );
 };

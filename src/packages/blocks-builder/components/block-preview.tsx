@@ -1,16 +1,8 @@
+import { EmptyCard } from "../common";
 import RowComponent from "../elements/rowComponent";
 import { BlockItem } from "./types";
 
-export const renderBlockPreview = (
-  items: any,
-  index: any,
-  block: any,
-  onElementSelected: any,
-  handleDeleteItem: any,
-  handleDuplicateItem: any,
-  onSortItems: any,
-  editableItemIndex: any
-) => {
+export const renderBlockPreview = (block: any, blockItemIdx: any) => {
   switch (block.type) {
     case "ImageBannerBasic":
       return (
@@ -21,20 +13,6 @@ export const renderBlockPreview = (
             style={{ width: "100%" }}
           />
         </div>
-      );
-
-    case "RowComponent":
-      return (
-        <RowComponent
-          {...block}
-          onElementSelected={onElementSelected}
-          handleDeleteItem={handleDeleteItem}
-          handleDuplicateItem={handleDuplicateItem}
-          onSortItems={onSortItems}
-          editableItemIndex={editableItemIndex}
-          items={items}
-          index={index}
-        />
       );
 
     case "text":

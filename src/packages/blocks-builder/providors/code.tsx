@@ -1,12 +1,14 @@
 // codeContext.js
 import React, { createContext, useContext, useState } from "react";
-import { blockItems } from "../components/blocks";
 import { v4 as uuidv4 } from "uuid";
 import { components } from "../components/components";
+import { blockItems } from "../components/blocks";
 
 const CodeContext = createContext<any>({});
 
 export const CodeProvider = ({ children }: any) => {
+  const [editorIndex, setEditorIndex] = useState<any>("1");
+
   const [codeState, setCodeState] = useState<any>({
     blocks: [],
     items: [...blockItems, ...components],
@@ -50,16 +52,14 @@ export const CodeProvider = ({ children }: any) => {
         (item: any) => item.id === draggableId
       );
 
-      if (foundTemplate?.children) {
-        const foundTemplateChildren = foundTemplate?.children.map(
-          (child: any) => {
-            return { ...child, id: uuidv4() };
-          }
-        );
+      if (foundTemplate?.items) {
+        const foundTemplateChildren = foundTemplate?.items.map((child: any) => {
+          return { ...child, id: uuidv4() };
+        });
 
         foundTemplate = {
           ...foundTemplate,
-          children: foundTemplateChildren,
+          items: foundTemplateChildren,
         };
       }
 
@@ -72,16 +72,12 @@ export const CodeProvider = ({ children }: any) => {
       updateCodeState({
         blocks: [...codeState.blocks, draggedItem],
       });
-    }
-    if (
-      source.droppableId === "components" &&
-      destination.droppableId === "canvas1"
-    ) {
+    } else if (source.droppableId === "components" && destination.droppableId) {
       // Generate unique ID for the dragged item
-      const foundComponent = codeState.items.find(
+      const foundComponent = codeState.items?.find(
         (item: any) => item.id === draggableId
       );
-      
+
       const draggedItem = {
         ...foundComponent,
         id: uuidv4(),
@@ -89,7 +85,7 @@ export const CodeProvider = ({ children }: any) => {
 
       // Find the index of the RowComponent in codeState.blocks
       const rowIndex = codeState.blocks.findIndex(
-        (block: any) => block.type === "RowComponent"
+        (block: any) => block.id === destination.droppableId
       );
 
       // Check if the RowComponent exists
@@ -101,8 +97,8 @@ export const CodeProvider = ({ children }: any) => {
       // Clone the RowComponent and update its children array
       const updatedRowComponent = {
         ...codeState.blocks[rowIndex],
-        children: [
-          ...(codeState.blocks[rowIndex].children.map((child: any) => {
+        items: [
+          ...(codeState.blocks[rowIndex]?.items.map((child: any) => {
             return { ...child, id: uuidv4() };
           }) || []),
           draggedItem,
@@ -121,7 +117,6 @@ export const CodeProvider = ({ children }: any) => {
   };
 
   const setCodeItems = (values: any) => {
-    console.log("🚀 ~ file: code.tsx:123 ~ setCodeItems ~ values:", values)
     // Generate unique IDs for new items
     const newItemsWithIds = values.map((item: any) => ({
       ...item,
@@ -141,13 +136,13 @@ export const CodeProvider = ({ children }: any) => {
       );
     } else {
       updatedBlocks = codeState.blocks.map((block: any) => {
-        if (block.children && block.children.length > 0) {
-          const updatedChildren = block.children.filter(
+        if (block.items && block.items.length > 0) {
+          const updatedChildren = block.items.filter(
             (child: any) => child.id !== itemId
           );
           return {
             ...block,
-            children: updatedChildren,
+            items: updatedChildren,
           };
         }
         return block;
@@ -165,18 +160,26 @@ export const CodeProvider = ({ children }: any) => {
     let updatedBlocks = [...codeState.blocks];
 
     if (type === "parent") {
-      updatedBlocks.push({ ...duplicatedBlock, id: uuidv4() });
+      updatedBlocks.push({
+        ...duplicatedBlock,
+        id: uuidv4(),
+        items: [
+          ...duplicatedBlock?.items.map((child: any) => {
+            return { ...child, id: uuidv4() };
+          }),
+        ],
+      });
     } else {
       updatedBlocks = updatedBlocks.map((block: any) => {
-        if (block.children && block.children.length > 0) {
-          const indexOfChild = block.children.find(
+        if (block.items && block.items.length > 0) {
+          const indexOfChild = block.items.find(
             (child: any) => child.id === itemId
           );
           const updatedChildren = [
-            ...block.children.slice(indexOfChild + 1),
+            ...block.items.slice(indexOfChild + 1),
             { ...indexOfChild, id: uuidv4() },
           ];
-          return { ...block, children: updatedChildren };
+          return { ...block, items: updatedChildren };
         }
         return block;
       });
@@ -191,6 +194,8 @@ export const CodeProvider = ({ children }: any) => {
     setCodeItems,
     handleDeleteItem,
     handleDuplicateItem,
+    editorIndex,
+    setEditorIndex,
   };
 
   return (
