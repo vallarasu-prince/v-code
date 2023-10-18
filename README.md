@@ -62,7 +62,7 @@ For inquiries, issues, or general assistance, please open an [issue](https://git
 - 📫 Reach me : 
   [![Linkedin Badge](https://img.shields.io/badge/-vallarasu-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/vallarasu-j/)](https://www.linkedin.com/in/vallarasu-j/)
    [![Instagram Badge](https://img.shields.io/badge/-vallarasu.prince-833AB4?style=flat-square&logo=Instagram&logoColor=white&link=https://www.instagram.com/vallarasu.prince/)](https://www.instagram.com/vallarasu.prince/)
-   [![GitHub Badge](https://img.shields.io/badge/-vallarasu-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/vallarasu-j)](https://github.com/vallarasu-j/)
+   [![GitHub Badge](https://img.shields.io/badge/-vallarasu--prince-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/vallarasu-prince)](https://github.com/vallarasu-prince/)
 
 ## Contribution Guidelines
 
