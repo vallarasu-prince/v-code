@@ -12,6 +12,23 @@ Welcome to V-Code, a sophisticated low-code platform designed for effortless web
 
 - **react-beautiful-dnd Integration:** The integration of react-beautiful-dnd facilitates an intuitive drag-and-drop interface, allowing users to design and rearrange UI elements effortlessly.
 
+## Screenshots
+#### Templates 
+
+![alt text](./ss/1.png)
+
+#### Components
+
+![alt text](./ss/2.png)
+
+#### Editor
+
+![alt text](./ss/3.png)
+
+#### Preview
+
+![alt text](./ss/4.png)
+
 ## Getting Started
 
 To begin using V-Code, follow these steps:
