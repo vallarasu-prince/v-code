@@ -77,19 +77,40 @@ export const Editor = (props: any) => {
   };
 
   const handleEditProps = (newProps: any) => {
-    const editedItemIndex = blocks.findIndex(
-      (item: any) => item.id === editableItemId
-    );
-    const updatedItem = { ...blocks[editedItemIndex], props: newProps };
-    const updatedItems = [...blocks];
-    updatedItems[editedItemIndex] = updatedItem;
-    setCodeItems(updatedItems);
-    handleCloseDrawer();
+    if (elementType === "parent") {
+      const editedItemIndex = blocks.findIndex(
+        (item: any) => item.id === editableItemId
+      );
+
+      const updatedItem = { ...blocks[editedItemIndex], props: newProps };
+      const updatedItems = [...blocks];
+      updatedItems[editedItemIndex] = updatedItem;
+      setCodeItems(updatedItems);
+    } else {
+      const updatedItems = blocks?.map((block: any) => {
+        const updatedBlockItems = block?.items?.map((blockItem: any) => {
+          if (editableItemId === blockItem.id) {
+            return {
+              ...blockItem,
+              props: newProps,
+            };
+          }
+          return blockItem;
+        });
+
+        return {
+          ...block,
+          items: updatedBlockItems,
+        };
+      });
+
+      setCodeItems(updatedItems);
+    }
   };
 
   const handleStartEditing = (itemId: string, item: any, type: string) => {
     setEditableItemId(itemId);
-    setElementType(type)
+    setElementType(type);
     setFinalItem(item);
     setEditorIndex("3");
   };

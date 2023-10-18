@@ -16,7 +16,11 @@ export const renderBlockPreview = (block: any, blockItemIdx: any) => {
       );
 
     case "text":
-      return <h1 {...block}>{block.props.text}</h1>;
+      return (
+        <div>
+          <p {...block}>{block.props.text}</p>
+        </div>
+      );
 
     case "Img":
       return (

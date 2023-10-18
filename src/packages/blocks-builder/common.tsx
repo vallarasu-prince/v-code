@@ -50,7 +50,7 @@ export const InlineBlockRender = ({
         <EmptyCard />
       ) : (
         <div>
-          <Row gutter={[16, 16]} style={{...block?.props}}>
+          <Row gutter={[16, 16]} style={{ ...block?.props }}>
             {items?.map((item: any, blockItemIdx: any) => {
               return (
                 <Col span={12} key={item.id}>
@@ -113,7 +113,7 @@ export const EditHoverWrapper = (props: any) => {
     onElementSelected = () => {},
     ptype,
     item,
-    type="child",
+    type = "child",
     handleStartEditing = () => {},
   } = props;
 

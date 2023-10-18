@@ -16,8 +16,7 @@ import {
 } from "antd";
 import { components } from "./components";
 import { blockItems } from "./blocks";
-import { EmptyCard, InlineBlockRender } from "../common";
-import { useCode } from "../providors/code";
+import { InlineBlockRender } from "../common";
 
 export const DraggableComponent: any = ({ id, index, children }: any) => {
   return (
@@ -58,7 +57,7 @@ const SidePanel = (props: any) => {
       key: "1",
       label: "Templates",
       children: (
-        <>
+        <div style={{ width: "100%", height: "100%" }}>
           <Droppable droppableId="components" direction="vertical">
             {(provided) => (
               <div
@@ -66,7 +65,6 @@ const SidePanel = (props: any) => {
                 {...provided.droppableProps}
                 style={{
                   padding: 8,
-                  backgroundColor: "#f0f0f0",
                   width: "100%",
                   height: "100%",
                 }}
@@ -88,7 +86,7 @@ const SidePanel = (props: any) => {
               </div>
             )}
           </Droppable>
-        </>
+        </div>
       ),
     },
     {
